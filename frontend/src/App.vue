@@ -1,0 +1,17 @@
+<template>
+  <v-app>
+    <router-view />
+  </v-app>
+</template>
+
+<script setup>
+import { onMounted } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+
+const auth = useAuthStore()
+
+// Assim que o App abrir verifica se ja existe usuario logado
+onMounted(() => {
+  auth.checkUser()
+})
+</script>
