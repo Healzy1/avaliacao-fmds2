@@ -9,6 +9,11 @@ const port = process.env.PORT || 3000
 app.use(express.json())
 app.use(cors())
 
+// Iniciar
+app.listen(port, () => {
+  console.log(`🚀 Servidor rodando com Bun em http://localhost:${port}`)
+})
+
 // --- ROTAS (CRUD) ---
 
 // 1. GET - Listar Filmes
@@ -30,7 +35,7 @@ app.get('/filmes/:id', async (req, res) => {
     .from('filmes')
     .select('*')
     .eq('id', id)
-    .single() // <--- O PULO DO GATO: Retorna um objeto { }, não uma lista [ ]
+    .single()
 
   if (error) return res.status(500).json({ erro: error.message })
   
@@ -44,7 +49,7 @@ app.get('/filmes/:id', async (req, res) => {
 app.post('/filmes', async (req, res) => {
   const { titulo, genero, ano, nota, status, capa_url } = req.body
 
-  // Validação simples para garantir "Tratamento básico de erros" [cite: 79]
+  // Validação simples para garantir que o título seja fornecido
   if (!titulo) {
     return res.status(400).json({ erro: 'O título é obrigatório!' })
   }
@@ -83,9 +88,4 @@ app.delete('/filmes/:id', async (req, res) => {
 
   if (error) return res.status(500).json({ erro: error.message })
   res.json({ message: 'Filme removido!' })
-})
-
-// Iniciar
-app.listen(port, () => {
-  console.log(`🚀 Servidor rodando com Bun em http://localhost:${port}`)
 })
