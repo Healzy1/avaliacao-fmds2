@@ -60,9 +60,13 @@ O projeto está organizado como um *monorepo*, separando claramente as responsab
 ```text
 avaliacao-fmds2/
 ├── backend/                 # API REST (Express + Supabase)
-│   ├── index.js             # Servidor e Rotas
-│   ├── utils/
-│   │   └── supabase.js      # Conexão com o Banco
+│   ├── controllers/         # Lógica de Negócio (O "Cérebro" da API)
+│   │   └── FilmeController.js
+│   ├── routes/              # Definição das Rotas (Endpoints)
+│   │   └── filmes.js
+│   ├── utils/               # Configurações e Conexões
+│   │   └── supabase.js      # Cliente do Supabase
+│   ├── index.js             # Ponto de entrada (Entry Point)
 │   └── package.json         # Dependências do Backend
 │
 └── frontend/                # Aplicação Web (Vue 3 + Vuetify)
