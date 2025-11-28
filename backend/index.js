@@ -20,5 +20,5 @@ app.get('/', (req, res) => {
 
 // --- Iniciar Servidor ---
 app.listen(port, () => {
-  console.log(`🚀 Servidor MVC rodando com Bun em http://localhost:${port}`)
+  console.log(`🚀 Servidor rodando com Bun em http://localhost:${port}`)
 })
