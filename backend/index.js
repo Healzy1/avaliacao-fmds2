@@ -1,91 +1,24 @@
 import express from 'express'
 import cors from 'cors'
-import { supabase } from './utils/supabase.js'
+import filmesRoutes from './routes/filmes.js' // Importa o arquivo de rotas
 
 const app = express()
 const port = process.env.PORT || 3000
 
-// Middlewares
+// --- Middlewares ---
 app.use(express.json())
 app.use(cors())
 
-// Iniciar
+// --- Rotas ---
+// Tudo que chegar em /filmes será tratado pelo arquivo de rotas
+app.use('/filmes', filmesRoutes)
+
+// Rota raiz para teste (opcional)
+app.get('/', (req, res) => {
+  res.send('API de Filmes rodando! Use /filmes')
+})
+
+// --- Iniciar Servidor ---
 app.listen(port, () => {
-  console.log(`🚀 Servidor rodando com Bun em http://localhost:${port}`)
-})
-
-// --- ROTAS (CRUD) ---
-
-// 1. GET - Listar Filmes
-app.get('/filmes', async (req, res) => {
-  const { data, error } = await supabase
-    .from('filmes')
-    .select('*')
-    .order('id', { ascending: false })
-
-  if (error) return res.status(500).json({ erro: error.message })
-  res.json(data)
-})
-
-// 1.5. GET - Buscar APENAS UM filme pelo ID
-app.get('/filmes/:id', async (req, res) => {
-  const { id } = req.params
-
-  const { data, error } = await supabase
-    .from('filmes')
-    .select('*')
-    .eq('id', id)
-    .single()
-
-  if (error) return res.status(500).json({ erro: error.message })
-  
-  // Se não achar nada (data vazio), retorna 404
-  if (!data) return res.status(404).json({ erro: 'Filme não encontrado' })
-
-  res.json(data)
-})
-
-// 2. POST - Criar Filme
-app.post('/filmes', async (req, res) => {
-  const { titulo, genero, ano, nota, status, capa_url } = req.body
-
-  // Validação simples para garantir que o título seja fornecido
-  if (!titulo) {
-    return res.status(400).json({ erro: 'O título é obrigatório!' })
-  }
-
-  const { data, error } = await supabase
-    .from('filmes')
-    .insert([{ titulo, genero, ano, nota, status, capa_url }])
-    .select()
-
-  if (error) return res.status(500).json({ erro: error.message })
-  res.status(201).json(data)
-})
-
-// 3. PUT - Atualizar Filme
-app.put('/filmes/:id', async (req, res) => {
-  const { id } = req.params
-  const { titulo, genero, ano, nota, status, capa_url } = req.body
-
-  const { error } = await supabase
-    .from('filmes')
-    .update({ titulo, genero, ano, nota, status, capa_url })
-    .eq('id', id)
-
-  if (error) return res.status(500).json({ erro: error.message })
-  res.json({ message: 'Filme atualizado com sucesso!' })
-})
-
-// 4. DELETE - Deletar Filme
-app.delete('/filmes/:id', async (req, res) => {
-  const { id } = req.params
-
-  const { error } = await supabase
-    .from('filmes')
-    .delete()
-    .eq('id', id)
-
-  if (error) return res.status(500).json({ erro: error.message })
-  res.json({ message: 'Filme removido!' })
+  console.log(`🚀 Servidor MVC rodando com Bun em http://localhost:${port}`)
 })
