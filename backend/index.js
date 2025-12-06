@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import filmesRoutes from './routes/filmes.js' // Importa o arquivo de rotas
+import swagger from './docs/swagger.js';
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -13,7 +14,7 @@ app.use(cors())
 // Tudo que chegar em /filmes será tratado pelo arquivo de rotas
 app.use('/filmes', filmesRoutes)
 
-// Rota raiz para teste (opcional)
+// Rota raiz para teste
 app.get('/', (req, res) => {
   res.send('API de Filmes rodando! Use /filmes')
 })
@@ -22,3 +23,6 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`🚀 Servidor rodando com Bun em http://localhost:${port}`)
 })
+
+// --- Documentação Swagger ---
+swagger(app);
